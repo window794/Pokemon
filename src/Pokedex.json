@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "name": "フシギダネ",
+        "types": ["くさ", "どく"],
+        "height": "0.7m",
+        "weight": "6.9kg",
+        "description": "生まれてすぐ\n背中にタネがある。",
+        "image": "./images/001.png"
+    },
+    {
+        "id": 2,
+        "name": "フシギソウ",
+        "types": ["くさ", "どく"],
+        "height": "1.0m",
+        "weight": "13.0kg",
+        "description": "背中のつぼみが\n大きく育っていく。",
+        "image": "./images/002.png"
+    },
+    {
+        "id": 3,
+        "name": "フシギバナ",
+        "types": ["くさ", "どく"],
+        "height": "2.0m",
+        "weight": "100.0kg",
+        "description": "大きな花から\n甘い香りを放つ。",
+        "image": "./images/003.png"
+    },
+    {
+        "id": 4,
+        "name": "ヒトカゲ",
+        "types": ["ほのお"],
+        "height": "0.6m",
+        "weight": "8.5kg",
+        "description": "しっぽの炎は\n元気な証拠。",
+        "image": "./images/004.png"
+    },
+    {
+        "id": 5,
+        "name": "リザード",
+        "types": ["ほのお"],
+        "height": "1.1m",
+        "weight": "19.0kg",
+        "description": "炎を吹き出して\n戦う。",
+        "image": "./images/005.png"
+    },
+    {
+        "id": 6,
+        "name": "リザードン",
+        "types": ["ほのお", "ひこう"],
+        "height": "1.7m",
+        "weight": "90.5kg",
+        "description": "強力な炎で\n焼き尽くす。",
+        "image": "./images/006.png"
+    },
+    {
+        "id": 7,
+        "name": "ゼニガメ",
+        "types": ["みず"],
+        "height": "0.5m",
+        "weight": "9.0kg",
+        "description": "甲羅にこもって\n身を守る。",
+        "image": "./images/007.png"
+    },
+    {
+        "id": 8,
+        "name": "カメール",
+        "types": ["みず"],
+        "height": "1.0m",
+        "weight": "22.5kg",
+        "description": "ふさふさした\nしっぽが特徴。",
+        "image": "./images/008.png"
+    },
+    {
+        "id": 9,
+        "name": "カメックス",
+        "types": ["みず"],
+        "height": "1.6m",
+        "weight": "85.5kg",
+        "description": "甲羅の砲台から\n水を撃つ。",
+        "image": "./images/009.png"
+    },
+    {
+        "id": 10,
+        "name": "キャタピー",
+        "types": ["むし"],
+        "height": "0.3m",
+        "weight": "2.9kg",
+        "description": "葉っぱが\n大好物。",
+        "image": "./images/010.png"
+    }
+]

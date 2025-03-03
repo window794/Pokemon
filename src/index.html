@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <title>ポケモン赤緑図鑑</title>
+    <style>
+        .pokemon-card {
+            border: 1px solid #ccc;
+            padding: 8px;
+            margin: 4px;
+            background-color: #f9f9f9;
+            display: inline-block;
+            width: 150px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .image-wrapper {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .image-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+    <script src="./app.js" defer></script>
+</head>
+<body>
+    <h1>ポケモン赤緑図鑑</h1>
+    <input type="text" id="searchBox" placeholder="名前やタイプで検索">
+    <div id="pokedex-container"></div>
+</body>
+</html>
