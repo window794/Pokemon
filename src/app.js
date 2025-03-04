@@ -65,6 +65,14 @@ function displayPokedex(pokedex) {
     pokedex.forEach(function (pokemon) {
         var div = document.createElement('div');
         div.classList.add('pokemon-card');
+        pokemon.types.forEach(function (type) {
+            if (type === 'くさ')
+                div.classList.add('grass');
+            if (type === 'ほのお')
+                div.classList.add('fire');
+            if (type === 'みず')
+                div.classList.add('water');
+        });
         // 説明文の改行を<br>に変換
         var descriptionWithBreaks = pokemon.description.replace(/\n/g, '<br>');
         div.innerHTML = "\n            <h3>No.".concat(pokemon.id, " ").concat(pokemon.name, "</h3>\n            <div class=\"image-wrapper\">\n                <img src=\"").concat(pokemon.image, "\" alt=\"").concat(pokemon.name, "\">\n            </div>\n            <p>\u30BF\u30A4\u30D7: ").concat(pokemon.types.join(', '), "</p>\n            <p>\u9AD8\u3055: ").concat(pokemon.height, "</p>\n            <p>\u91CD\u3055: ").concat(pokemon.weight, "</p>\n            <p>").concat(descriptionWithBreaks, "</p>\n        ");

@@ -1,39 +1,70 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <title>ポケモン赤緑図鑑</title>
-    <style>
-        .pokemon-card {
-            border: 1px solid #ccc;
-            padding: 8px;
-            margin: 4px;
-            background-color: #f9f9f9;
-            display: inline-block;
-            width: 150px;
-            text-align: center;
-            box-sizing: border-box;
-        }
-        .image-wrapper {
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: white;
-            margin: 0 auto;
-            overflow: hidden;
-        }
-        .image-wrapper img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-    </style>
-    <script src="./app.js" defer></script>
-</head>
-<body>
-    <h1>ポケモン赤緑図鑑</h1>
-    <input type="text" id="searchBox" placeholder="名前やタイプで検索">
-    <div id="pokedex-container"></div>
-</body>
+    <head>
+        <title>ポケモン赤緑図鑑</title>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <style>
+/* 全体 */
+body {
+    font-family: 'Press Start 2P', cursive; /* ドットフォント */
+    background-color: #d7d7d7; /* ゲームボーイ風グレー */
+    color: #222;
+    padding: 10px;
+}
+
+/* 図鑑カード */
+.pokemon-card {
+    border: 3px solid #5a5;
+    background-color: #f8f8f8;
+    padding: 8px;
+    margin: 5px;
+    display: inline-block;
+    width: 150px;
+    text-align: center;
+    box-shadow: 4px 4px 0 #555;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ホバーでちょい浮き */
+.pokemon-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #555;
+}
+
+/* 画像枠 */
+.image-wrapper {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border: 2px solid #aaa;
+}
+
+/* タイプごとに色分け（枠色） */
+.pokemon-card.grass { border-color: #78C850; }
+.pokemon-card.fire { border-color: #F08030; }
+.pokemon-card.water { border-color: #6890F0; }
+
+/* 見出し */
+h3 {
+    font-size: 10px;
+    margin: 5px 0;
+}
+
+/* 説明文など */
+p {
+    font-size: 8px;
+    margin: 3px 0;
+}
+        </style>
+        <script src="./app.js" defer></script>
+    </head>
+    <body>
+        <h1>ポケモン赤緑図鑑</h1>
+        <input type="text" id="searchBox" placeholder="名前やタイプで検索">
+        <div id="pokedex-container"></div>
+    </body>
 </html>

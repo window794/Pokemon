@@ -35,6 +35,13 @@ function displayPokedex(pokedex: Pokemon[]) {
         const div = document.createElement('div');
         div.classList.add('pokemon-card');
 
+        pokemon.types.forEach(type => {
+            if (type === 'くさ') div.classList.add('grass');
+            if (type === 'ほのお') div.classList.add('fire');
+            if (type === 'みず') div.classList.add('water');
+        });
+        
+
         // 説明文の改行を<br>に変換
         const descriptionWithBreaks = pokemon.description.replace(/\n/g, '<br>');
 
