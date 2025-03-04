@@ -35,11 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var allPokemon = [];
-var currentMode = 'list';
+var showFavoritesOnly = false;
 // データ取得
 function fetchPokedex() {
     return __awaiter(this, void 0, void 0, function () {
-        var response;
+        var response, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, fetch('./pokedex.json')];
@@ -49,7 +49,10 @@ function fetchPokedex() {
                         throw new Error('データの読み込みに失敗しました');
                     }
                     return [4 /*yield*/, response.json()];
-                case 2: return [2 /*return*/, _a.sent()];
+                case 2:
+                    data = _a.sent();
+                    data.forEach(function (pokemon) { return pokemon.favorite = false; }); // 初期は全部未お気に入り
+                    return [2 /*return*/, data];
             }
         });
     });
@@ -61,9 +64,9 @@ function displayPokedex(pokedex) {
         return;
     container.innerHTML = '';
     pokedex.forEach(function (pokemon) {
+        var _a;
         var div = document.createElement('div');
         div.classList.add('pokemon-card');
-        // 最初のタイプだけで枠色決定
         var firstType = pokemon.types[0];
         if (firstType === 'くさ')
             div.classList.add('grass');
@@ -75,41 +78,56 @@ function displayPokedex(pokedex) {
             div.classList.add('poison');
         if (firstType === 'むし')
             div.classList.add('bug');
+        var star = pokemon.favorite ? '★' : '☆';
         var descriptionWithBreaks = pokemon.description.replace(/\n/g, '<br>');
-        div.innerHTML = "\n            <h3>No.".concat(pokemon.id, " ").concat(pokemon.name, "</h3>\n            <div class=\"image-wrapper\">\n                <img src=\"").concat(pokemon.image, "\" alt=\"").concat(pokemon.name, "\">\n            </div>\n            <p>\u30BF\u30A4\u30D7: ").concat(pokemon.types.join(', '), "</p>\n            <p>\u9AD8\u3055: ").concat(pokemon.height, "</p>\n            <p>\u91CD\u3055: ").concat(pokemon.weight, "</p>\n            <p>").concat(descriptionWithBreaks, "</p>\n        ");
+        div.innerHTML = "\n            <h3><span class=\"favorite\">".concat(star, "</span> No.").concat(pokemon.id, " ").concat(pokemon.name, "</h3>\n            <div class=\"image-wrapper\">\n                <img src=\"").concat(pokemon.image, "\" alt=\"").concat(pokemon.name, "\">\n            </div>\n            <p>\u30BF\u30A4\u30D7: ").concat(pokemon.types.join(', '), "</p>\n            <p>\u9AD8\u3055: ").concat(pokemon.height, "</p>\n            <p>\u91CD\u3055: ").concat(pokemon.weight, "</p>\n            <p>").concat(descriptionWithBreaks, "</p>\n        ");
+        (_a = div.querySelector('.favorite')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', function (e) {
+            e.stopPropagation(); // クリックが詳細表示に伝わらないように
+            pokemon.favorite = !pokemon.favorite;
+            displayPokedex(getFilteredPokemon());
+        });
         div.addEventListener('click', function () { return showPokemonDetail(pokemon); });
         container.appendChild(div);
     });
 }
 // 詳細表示
 function showPokemonDetail(pokemon) {
-    currentMode = 'detail';
     var container = document.getElementById('pokedex-container');
     if (!container)
         return;
     var descriptionWithBreaks = pokemon.description.replace(/\n/g, '<br>');
     container.innerHTML = "\n        <div class=\"pokemon-detail\">\n            <h2>No.".concat(pokemon.id, " ").concat(pokemon.name, "</h2>\n            <div class=\"image-wrapper\">\n                <img src=\"").concat(pokemon.image, "\" alt=\"").concat(pokemon.name, "\">\n            </div>\n            <p><strong>\u30BF\u30A4\u30D7:</strong> ").concat(pokemon.types.join(', '), "</p>\n            <p><strong>\u9AD8\u3055:</strong> ").concat(pokemon.height, "</p>\n            <p><strong>\u91CD\u3055:</strong> ").concat(pokemon.weight, "</p>\n            <p>").concat(descriptionWithBreaks, "</p>\n            <button onclick=\"showPokedexList()\">\u4E00\u89A7\u306B\u623B\u308B</button>\n        </div>\n    ");
 }
+// お気に入りフィルタ
+function getFilteredPokemon() {
+    if (showFavoritesOnly) {
+        return allPokemon.filter(function (p) { return p.favorite; });
+    }
+    return allPokemon;
+}
 // 一覧に戻る
 function showPokedexList() {
-    currentMode = 'list';
-    displayPokedex(allPokemon);
+    displayPokedex(getFilteredPokemon());
 }
-// 検索ボックスのイベント登録
+// 検索
+function filterPokedex(keyword) {
+    var lowerKeyword = keyword.toLowerCase();
+    var filtered = allPokemon.filter(function (pokemon) {
+        return (pokemon.name.toLowerCase().includes(lowerKeyword) ||
+            pokemon.types.some(function (type) { return type.toLowerCase().includes(lowerKeyword); })) &&
+            (!showFavoritesOnly || pokemon.favorite);
+    });
+    displayPokedex(filtered);
+}
+// イベント登録
 function setupSearchBox() {
     var searchBox = document.getElementById('searchBox');
     searchBox.addEventListener('input', function () { return filterPokedex(searchBox.value); });
-}
-// 検索処理
-function filterPokedex(keyword) {
-    if (currentMode === 'detail')
-        return;
-    var lowerKeyword = keyword.toLowerCase();
-    var filtered = allPokemon.filter(function (pokemon) {
-        return pokemon.name.toLowerCase().includes(lowerKeyword) ||
-            pokemon.types.some(function (type) { return type.toLowerCase().includes(lowerKeyword); });
+    var favoriteFilter = document.getElementById('favoriteFilter');
+    favoriteFilter.addEventListener('change', function () {
+        showFavoritesOnly = favoriteFilter.checked;
+        displayPokedex(getFilteredPokemon());
     });
-    displayPokedex(filtered);
 }
 // 初期表示
 fetchPokedex()
