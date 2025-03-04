@@ -34,9 +34,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-// 全ポケモンデータ（検索時に使う用）
 var allPokemon = [];
-// データ取得関数
+var currentMode = 'list';
+// データ取得
 function fetchPokedex() {
     return __awaiter(this, void 0, void 0, function () {
         var response;
@@ -54,59 +54,68 @@ function fetchPokedex() {
         });
     });
 }
-// 一覧表示関数
+// 一覧表示
 function displayPokedex(pokedex) {
     var container = document.getElementById('pokedex-container');
-    if (!container) {
-        console.error('❌ pokedex-containerが見つかりません！');
+    if (!container)
         return;
-    }
     container.innerHTML = '';
     pokedex.forEach(function (pokemon) {
         var div = document.createElement('div');
         div.classList.add('pokemon-card');
-        pokemon.types.forEach(function (type) {
-            if (type === 'くさ')
-                div.classList.add('grass');
-            if (type === 'ほのお')
-                div.classList.add('fire');
-            if (type === 'みず')
-                div.classList.add('water');
-        });
-        // 説明文の改行を<br>に変換
+        // 最初のタイプだけで枠色決定
+        var firstType = pokemon.types[0];
+        if (firstType === 'くさ')
+            div.classList.add('grass');
+        if (firstType === 'ほのお')
+            div.classList.add('fire');
+        if (firstType === 'みず')
+            div.classList.add('water');
+        if (firstType === 'どく')
+            div.classList.add('poison');
+        if (firstType === 'むし')
+            div.classList.add('bug');
         var descriptionWithBreaks = pokemon.description.replace(/\n/g, '<br>');
         div.innerHTML = "\n            <h3>No.".concat(pokemon.id, " ").concat(pokemon.name, "</h3>\n            <div class=\"image-wrapper\">\n                <img src=\"").concat(pokemon.image, "\" alt=\"").concat(pokemon.name, "\">\n            </div>\n            <p>\u30BF\u30A4\u30D7: ").concat(pokemon.types.join(', '), "</p>\n            <p>\u9AD8\u3055: ").concat(pokemon.height, "</p>\n            <p>\u91CD\u3055: ").concat(pokemon.weight, "</p>\n            <p>").concat(descriptionWithBreaks, "</p>\n        ");
+        div.addEventListener('click', function () { return showPokemonDetail(pokemon); });
         container.appendChild(div);
     });
 }
-// 検索処理（フィルタリング）
+// 詳細表示
+function showPokemonDetail(pokemon) {
+    currentMode = 'detail';
+    var container = document.getElementById('pokedex-container');
+    if (!container)
+        return;
+    var descriptionWithBreaks = pokemon.description.replace(/\n/g, '<br>');
+    container.innerHTML = "\n        <div class=\"pokemon-detail\">\n            <h2>No.".concat(pokemon.id, " ").concat(pokemon.name, "</h2>\n            <div class=\"image-wrapper\">\n                <img src=\"").concat(pokemon.image, "\" alt=\"").concat(pokemon.name, "\">\n            </div>\n            <p><strong>\u30BF\u30A4\u30D7:</strong> ").concat(pokemon.types.join(', '), "</p>\n            <p><strong>\u9AD8\u3055:</strong> ").concat(pokemon.height, "</p>\n            <p><strong>\u91CD\u3055:</strong> ").concat(pokemon.weight, "</p>\n            <p>").concat(descriptionWithBreaks, "</p>\n            <button onclick=\"showPokedexList()\">\u4E00\u89A7\u306B\u623B\u308B</button>\n        </div>\n    ");
+}
+// 一覧に戻る
+function showPokedexList() {
+    currentMode = 'list';
+    displayPokedex(allPokemon);
+}
+// 検索ボックスのイベント登録
+function setupSearchBox() {
+    var searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('input', function () { return filterPokedex(searchBox.value); });
+}
+// 検索処理
 function filterPokedex(keyword) {
+    if (currentMode === 'detail')
+        return;
     var lowerKeyword = keyword.toLowerCase();
     var filtered = allPokemon.filter(function (pokemon) {
-        var lowerName = pokemon.name.toLowerCase();
-        var lowerTypes = pokemon.types.map(function (type) { return type.toLowerCase(); });
-        return lowerName.includes(lowerKeyword) || lowerTypes.some(function (type) { return type.includes(lowerKeyword); });
+        return pokemon.name.toLowerCase().includes(lowerKeyword) ||
+            pokemon.types.some(function (type) { return type.toLowerCase().includes(lowerKeyword); });
     });
     displayPokedex(filtered);
 }
-// 検索ボックス設定
-function setupSearchBox() {
-    var searchBox = document.getElementById('searchBox');
-    if (!searchBox) {
-        console.error('❌ searchBoxが見つかりません！');
-        return;
-    }
-    searchBox.addEventListener('input', function () {
-        filterPokedex(searchBox.value);
-    });
-}
-// 初期表示処理
+// 初期表示
 fetchPokedex()
     .then(function (pokedex) {
     allPokemon = pokedex;
     displayPokedex(pokedex);
     setupSearchBox();
 })
-    .catch(function (error) {
-    console.error('❌ データ取得エラー:', error);
-});
+    .catch(console.error);
